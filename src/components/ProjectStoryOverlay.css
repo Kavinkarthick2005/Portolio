@@ -1,0 +1,538 @@
+/* =====================================================
+   PROJECT STORY OVERLAY (V2.1)
+   Marban-Style Cinematic Engine
+   ===================================================== */
+
+   .ps-overlay {
+    position: fixed;
+    inset: 0;
+    background: #0a0a0a;
+    z-index: 1000;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-family: var(--font-body);
+    cursor: none; /* We use custom cursor */
+  }
+  
+  .ps-overlay::-webkit-scrollbar { width: 8px; }
+  .ps-overlay::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+  .ps-overlay::-webkit-scrollbar-thumb { background: rgba(124, 255, 140, 0.15); border-radius: 4px; }
+  
+  /* ── CUSTOM CURSOR ── */
+  .ps-custom-cursor {
+    position: fixed;
+    top: 0; left: 0;
+    width: 20px; height: 20px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+  
+  .ps-cursor-radar .ps-custom-cursor {
+    width: 40px; height: 40px;
+    border-color: var(--color-phosphor);
+    background: rgba(124, 255, 140, 0.1);
+    border-style: dashed;
+    animation: rotateSlow 4s linear infinite;
+  }
+  
+  @keyframes rotateSlow { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+  
+  /* ── SCROLL RIG ── */
+  .ps-scroll-track {
+    width: 100%;
+    position: relative;
+  }
+  
+  .ps-sticky-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    perspective: 1200px;
+  }
+  
+  /* ── HERO SCREENSHOT ── */
+  .ps-hero-container {
+    position: relative;
+    width: 70vw; /* 70% viewport width as requested */
+    max-width: 1400px;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.1s linear; /* Smooth scaling via JS */
+  }
+  
+  .ps-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(124, 255, 140, 0.1);
+    transition: filter 0.1s linear, opacity 0.1s linear;
+  }
+  
+  /* ── LAYERS ── */
+  .ps-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.4s ease;
+  }
+  
+  /* ── SCENE 1: TITLE ── */
+  .ps-hero-text {
+    position: absolute;
+    bottom: 8vh;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+  }
+  
+  .ps-title {
+    font-family: var(--font-body);
+    font-size: 3rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  
+  .ps-subtitle {
+    font-family: var(--font-mono);
+    color: var(--color-phosphor);
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+  
+  /* ── SCENE 2: INTELLIGENCE ── */
+  .ps-intelligence {
+    position: absolute;
+    bottom: 5vh;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 2rem;
+    z-index: 10;
+  }
+  
+  .ps-intel-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .ps-intel-item span {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-gray-600);
+    letter-spacing: 0.2em;
+  }
+  
+  .ps-intel-item strong {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: #fff;
+    letter-spacing: 0.1em;
+  }
+  
+  /* ── SCENE 3: HOTSPOTS ── */
+  .ps-layer-hotspots {
+    z-index: 20;
+  }
+  
+  .ps-hotspot-ring {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .ps-hotspot-core {
+    width: 8px;
+    height: 8px;
+    background: var(--color-phosphor);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--color-phosphor);
+  }
+  
+  .ps-hotspot-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--color-phosphor);
+    border-radius: 50%;
+    animation: pulseRing 2s infinite cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  
+  @keyframes pulseRing {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+  
+  .ps-hotspot-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    width: 320px;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(124, 255, 140, 0.2);
+    border-radius: 12px;
+    padding: 2rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  }
+  
+  .ps-hotspot-card.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  
+  .ps-hc-title {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    color: var(--color-phosphor);
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+  }
+  
+  .ps-hc-desc {
+    font-family: var(--font-body);
+    color: var(--color-gray-400);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+  
+  /* ── SCENE 4: WHY (Typography) ── */
+  .ps-why-text {
+    position: absolute;
+    left: 5vw;
+    top: 35vh;
+    z-index: 10;
+    max-width: 500px;
+  }
+  
+  .ps-why-header {
+    font-family: var(--font-mono);
+    color: var(--color-phosphor);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 2rem;
+  }
+  
+  .ps-why-body {
+    font-family: var(--font-body);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    white-space: pre-line;
+  }
+  
+  /* ── SCENE 5: AR ARCHITECTURE ── */
+  .ps-layer-ar {
+    z-index: 15;
+  }
+  
+  .ps-ar-svg {
+    position: absolute;
+    top: 0; left: 0;
+    pointer-events: none;
+  }
+  
+  .ps-ar-edge {
+    stroke: rgba(124, 255, 140, 0.4);
+    stroke-width: 2;
+    stroke-dasharray: 1000;
+    transition: stroke-dashoffset 2s ease-in-out;
+  }
+  
+  .ps-ar-node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    cursor: crosshair;
+  }
+  
+  .ps-ar-node-dot {
+    width: 12px;
+    height: 12px;
+    background: #0a0a0a;
+    border: 2px solid var(--color-phosphor);
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+  
+  .ps-ar-node:hover .ps-ar-node-dot {
+    transform: scale(1.5);
+    background: var(--color-phosphor);
+  }
+  
+  .ps-ar-node-card {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: rgba(15, 20, 25, 0.95);
+    border: 1px solid rgba(124, 255, 140, 0.2);
+    padding: 1rem;
+    border-radius: 8px;
+    width: max-content;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  
+  .ps-ar-node:hover .ps-ar-node-card {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  
+  .ps-ar-node-label {
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+  
+  .ps-ar-node-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-gray-500);
+  }
+  
+  .ps-ar-node-meta strong {
+    color: var(--color-phosphor);
+  }
+  
+  /* ── SCENE 6: METRICS ── */
+  .ps-layer-metrics {
+    z-index: 10;
+  }
+  
+  .ps-metric-card {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background: rgba(10, 10, 10, 0.6);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  
+  .ps-mc-value {
+    font-family: var(--font-body);
+    font-size: 3rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  
+  .ps-mc-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-phosphor);
+    letter-spacing: 0.15em;
+  }
+  
+  /* ── SCENE 7: TECH STACK ── */
+  .ps-layer-stack {
+    z-index: 10;
+  }
+  
+  .ps-stack-chip {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: rgba(15, 20, 25, 0.9);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    letter-spacing: 0.1em;
+    transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    animation: floatChip 4s ease-in-out infinite alternate;
+  }
+  
+  @keyframes floatChip {
+    from { transform: translate(-50%, -50%) translateY(0); }
+    to { transform: translate(-50%, -50%) translateY(-15px); }
+  }
+  
+  .ps-stack-chip:hover {
+    border-color: var(--color-phosphor);
+    box-shadow: 0 0 20px rgba(124, 255, 140, 0.2);
+    color: var(--color-phosphor);
+    animation-play-state: paused;
+  }
+  
+  /* ── SCENE 8: EXIT & LESSONS ── */
+  .ps-exit-section {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 30;
+  }
+  
+  .ps-lessons-header {
+    font-family: var(--font-mono);
+    color: var(--color-gray-600);
+    letter-spacing: 0.3em;
+    font-size: 0.9rem;
+    margin-bottom: 4rem;
+  }
+  
+  .ps-lessons-list {
+    text-align: center;
+    max-width: 800px;
+    margin-bottom: 5rem;
+  }
+  
+  .ps-lesson-item {
+    font-family: var(--font-body);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.3;
+    letter-spacing: -0.03em;
+    margin-bottom: 2rem;
+    white-space: pre-line;
+    opacity: 0;
+    animation: fadeUpIn 0.8s forwards;
+  }
+  
+  .ps-exit-section .ps-lesson-item {
+    /* Inherit transition delay from inline style */
+    opacity: 1; /* Actually we handle master opacity via parent */
+  }
+  
+  .ps-exit-actions {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  
+  .ps-btn {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    padding: 1rem 2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .ps-btn-primary {
+    background: #fff;
+    color: #000;
+    font-weight: 700;
+  }
+  
+  .ps-btn-primary:hover {
+    background: var(--color-phosphor);
+    box-shadow: 0 0 20px rgba(124, 255, 140, 0.3);
+  }
+  
+  .ps-btn-secondary {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+  }
+  
+  .ps-btn-secondary:hover {
+    border-color: #fff;
+    background: rgba(255,255,255,0.05);
+  }
+  
+  .ps-btn-return {
+    background: transparent;
+    border: none;
+    color: var(--color-phosphor);
+    position: relative;
+  }
+  
+  .ps-btn-return::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 2rem;
+    right: 2rem;
+    height: 1px;
+    background: var(--color-phosphor);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+  
+  .ps-btn-return:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  
+  /* ── TRANSITIONS ── */
+  .ps-black-overlay {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0s;
+  }
+  
+  .ps-overlay--collapse .ps-hero-container {
+    transform: scale(0.8) !important;
+    transition: transform 0.4s cubic-bezier(0.5, 0, 0, 1) !important;
+  }
+  
+  .ps-overlay--glitch .ps-hero-container {
+    animation: heavyGlitch 0.3s infinite steps(2);
+  }
+  
+  .ps-overlay--black .ps-black-overlay {
+    opacity: 1;
+  }
+  
+  @keyframes heavyGlitch {
+    0% { transform: translate(0); filter: drop-shadow(-4px 0 0 rgba(255,0,0,0.8)); clip-path: inset(10% 0 80% 0); }
+    50% { transform: translate(-10px, 5px); filter: drop-shadow(4px 0 0 rgba(124,255,140,0.8)); clip-path: inset(50% 0 10% 0); }
+    100% { transform: translate(10px, -5px); filter: none; clip-path: none; }
+  }

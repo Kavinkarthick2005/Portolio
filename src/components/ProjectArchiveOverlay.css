@@ -1,0 +1,324 @@
+/* =====================================================
+   PROJECT ARCHIVE OVERLAY
+   Marban-Style Cinematic Engine
+   ===================================================== */
+
+   .pa-overlay {
+    position: fixed;
+    inset: 0;
+    background: #0a0a0a;
+    z-index: 1000;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-family: var(--font-body);
+    cursor: none; /* We use custom cursor */
+  }
+  
+  .pa-overlay::-webkit-scrollbar { width: 8px; }
+  .pa-overlay::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+  .pa-overlay::-webkit-scrollbar-thumb { background: rgba(124, 255, 140, 0.15); border-radius: 4px; }
+  
+  /* ── CUSTOM CURSOR ── */
+  .pa-custom-cursor {
+    position: fixed;
+    top: 0; left: 0;
+    width: 20px; height: 20px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+  
+  .pa-cursor-radar .pa-custom-cursor {
+    width: 40px; height: 40px;
+    border-color: var(--color-phosphor);
+    background: rgba(124, 255, 140, 0.1);
+    border-style: dashed;
+    animation: rotateSlow 4s linear infinite;
+  }
+  
+  @keyframes rotateSlow { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+  
+  /* ── SCROLL RIG ── */
+  .pa-scroll-track {
+    width: 100%;
+    position: relative;
+  }
+  
+  .pa-sticky-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  
+  /* ── PROJECT LAYER ── */
+  .pa-project-layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    will-change: opacity, transform;
+  }
+  
+  .pa-bg-gradient {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  
+  /* ── HERO SCREENSHOT ── */
+  .pa-hero-container {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 5;
+    will-change: transform;
+  }
+  
+  .pa-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    will-change: filter;
+  }
+  
+  .pa-hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: #000;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* ── TEXT ANIMATION (MARBAN STYLE) ── */
+  .pa-text-container {
+    position: absolute;
+    bottom: 8vh;
+    left: 10vw;
+    z-index: 10;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+  
+  .pa-project-title {
+    font-family: var(--font-body);
+    font-size: 4rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    line-height: 1;
+  }
+  
+  .pa-project-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .pa-project-line {
+    font-family: var(--font-mono);
+    color: var(--color-gray-300);
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    will-change: transform, opacity;
+  }
+  
+  /* ── SCENE 3: HOTSPOTS ── */
+  .pa-hotspot-ring {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 15;
+  }
+  
+  .pa-hotspot-core {
+    width: 8px;
+    height: 8px;
+    background: var(--color-phosphor);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--color-phosphor);
+  }
+  
+  .pa-hotspot-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--color-phosphor);
+    border-radius: 50%;
+    animation: pulseRing 2s infinite cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  
+  @keyframes pulseRing {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+  
+  .pa-hotspot-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    width: 320px;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(124, 255, 140, 0.2);
+    border-radius: 12px;
+    padding: 2rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    z-index: 20;
+  }
+  
+  .pa-hotspot-card.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  
+  .pa-hc-title {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    color: var(--color-phosphor);
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+  }
+  
+  .pa-hc-desc {
+    font-family: var(--font-body);
+    color: var(--color-gray-400);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+  
+  /* ── EXIT SCENE ── */
+  .pa-exit-layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0a0a0a;
+  }
+  
+  .pa-exit-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+  }
+  
+  .pa-exit-heading {
+    font-family: var(--font-mono);
+    color: var(--color-gray-500);
+    letter-spacing: 0.3em;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+  }
+  
+  .pa-exit-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-phosphor);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    position: relative;
+    padding: 1rem 2rem;
+    border: 1px solid rgba(124, 255, 140, 0.2);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+  
+  .pa-exit-btn:hover {
+    background: rgba(124, 255, 140, 0.1);
+    box-shadow: 0 0 20px rgba(124, 255, 140, 0.2);
+  }
+  
+  /* ── TRANSITIONS ── */
+  .pa-black-overlay {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0s;
+  }
+  
+  .pa-overlay--collapse .pa-sticky-stage {
+    transform: scale(0.95);
+    opacity: 0.5;
+    transition: transform 0.4s cubic-bezier(0.5, 0, 0, 1), opacity 0.4s ease;
+  }
+  
+  .pa-overlay--glitch .pa-sticky-stage {
+    animation: heavyGlitch 0.3s infinite steps(2);
+  }
+  
+  .pa-overlay--black .pa-black-overlay {
+    opacity: 1;
+  }
+  
+  @keyframes heavyGlitch {
+    0% { transform: translate(0); filter: drop-shadow(-4px 0 0 rgba(255,0,0,0.8)); clip-path: inset(10% 0 80% 0); }
+    50% { transform: translate(-10px, 5px); filter: drop-shadow(4px 0 0 rgba(124,255,140,0.8)); clip-path: inset(50% 0 10% 0); }
+    100% { transform: translate(10px, -5px); filter: none; clip-path: none; }
+  }
+
+/* -- PROJECT LINK CTA -- */
+.pa-project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #000;
+  background: var(--color-phosphor);
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 700;
+  width: max-content;
+  margin-top: 1.5rem;
+  transition: transform 0.3s ease, background 0.3s ease;
+  will-change: transform, opacity;
+  pointer-events: auto; /* Required because parent container is pointer-events: none */
+}
+
+.pa-project-link:hover {
+  transform: translateY(-2px);
+  background: #fff;
+}
+
+.pa-link-arrow {
+  width: 14px;
+  height: 14px;
+}
+
+/* ENTRY ANIMATION */
+.pa-overlay {
+  animation: paEntryFade 1.2s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+}
+
+@keyframes paEntryFade {
+  0% { opacity: 0; filter: blur(20px); transform: scale(1.05); }
+  100% { opacity: 1; filter: blur(0px); transform: scale(1); }
+}

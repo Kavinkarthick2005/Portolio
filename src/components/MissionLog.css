@@ -1,0 +1,553 @@
+/* =====================================================================
+   MISSION LOG — Timeline / History
+   ===================================================================== */
+
+/* ── Scroll wrapper ──
+   Naturally follows the preceding section without negative offset.
+*/
+.ml-wrapper {
+  position: relative;
+  height: 580vh;         /* 580 − 100 (sticky height) = 480vh scroll budget = 6 × 80vh per entry */
+  width: 100%;
+  z-index: 15;           /* above hub section (z-index 10) */
+  margin-top: -100vh;
+}
+
+/* ── Sticky viewport ── */
+.ml-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding-top: 88px;    /* Pushes content below the 100px fixed header fade mask */
+  box-sizing: border-box;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  will-change: opacity;
+}
+
+/* ═══════════════════════════════════════════
+   HEADER BAR
+═══════════════════════════════════════════ */
+.ml-header {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0 6vw;
+  height: 64px;          /* Slightly shorter height to balance the padding-top shift */
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(124, 255, 140, 0.06);
+}
+
+.ml-header-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-phosphor);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.ml-header-rule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(124, 255, 140, 0.18) 0%,
+    transparent 100%
+  );
+  max-width: 320px;
+}
+
+.ml-header-count {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--color-gray-500);
+  letter-spacing: 0.22em;
+  white-space: nowrap;
+  opacity: 0.55;
+}
+
+/* ═══════════════════════════════════════════
+   TWO-COLUMN LAYOUT
+═══════════════════════════════════════════ */
+.ml-columns {
+  flex: 1;
+  display: flex;
+  gap: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   LEFT SPINE
+═══════════════════════════════════════════ */
+.ml-spine {
+  width: 280px;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 2.5rem 0 2.5rem 6vw;
+  border-right: 1px solid rgba(124, 255, 140, 0.05);
+}
+
+/* Vertical rail line — runs behind checkpoint nodes */
+.ml-rail {
+  position: absolute;
+  left: calc(6vw + 17px);   /* centre of 36px node */
+  top: 2.5rem;
+  bottom: 2.5rem;
+  width: 1px;
+  background: rgba(124, 255, 140, 0.08);
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ml-rail-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(
+    to bottom,
+    rgba(124, 255, 140, 0.7) 0%,
+    rgba(124, 255, 140, 0.3) 100%
+  );
+  box-shadow: 0 0 8px rgba(124, 255, 140, 0.25);
+  transition: height 80ms linear;
+  will-change: height;
+}
+
+/* ── Single checkpoint ── */
+.ml-checkpoint {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  pointer-events: auto;
+  will-change: opacity, transform;
+  transition: opacity 120ms linear, transform 200ms ease;
+}
+
+.ml-checkpoint:hover {
+  transform: translateX(4px);
+}
+
+.ml-checkpoint:hover .ml-node {
+  box-shadow: 0 0 10px rgba(124, 255, 140, 0.25);
+}
+
+.ml-checkpoint--failed:hover .ml-node {
+  box-shadow: 0 0 10px rgba(255, 124, 124, 0.25);
+}
+
+/* ── Node wrap ── */
+.ml-node-wrap {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+}
+
+/* ── Node circle ── */
+.ml-node {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    width 220ms ease,
+    height 220ms ease,
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+  will-change: width, height, box-shadow;
+}
+
+/* Future node — outline ring, no fill, no number */
+.ml-checkpoint[data-state="future"] .ml-node {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid rgba(124, 255, 140, 0.18);
+  background: transparent;
+}
+
+/* Past node — small solid dot */
+.ml-checkpoint[data-state="past"] .ml-node {
+  width: 10px;
+  height: 10px;
+  border: none;
+  background: rgba(124, 255, 140, 0.45);
+  box-shadow: 0 0 4px rgba(124, 255, 140, 0.2);
+}
+
+/* Active node — full size, glowing ring, shows number */
+.ml-checkpoint[data-state="active"] .ml-node {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--color-phosphor);
+  background: transparent;
+  box-shadow:
+    0 0 0 6px rgba(124, 255, 140, 0.08),
+    0 0 0 3px rgba(124, 255, 140, 0.15),
+    0 0 22px rgba(124, 255, 140, 0.4);
+}
+
+/* Number shown only in active state */
+.ml-node-num {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-phosphor);
+  opacity: 0;
+  transition: opacity 220ms ease;
+  user-select: none;
+}
+
+.ml-checkpoint[data-state="active"] .ml-node-num {
+  opacity: 1;
+}
+
+/* ── Checkpoint label ── */
+.ml-cp-info {
+  overflow: hidden;
+}
+
+.ml-cp-code {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+  white-space: nowrap;
+  transition: color 220ms ease;
+}
+
+.ml-checkpoint[data-state="active"] .ml-cp-code {
+  color: var(--color-phosphor);
+}
+
+.ml-checkpoint[data-state="past"] .ml-cp-code {
+  color: rgba(124, 255, 140, 0.35);
+}
+
+/* ── MISSION FAILED: red/coral overrides ── */
+.ml-checkpoint--failed[data-state="past"] .ml-node {
+  background: rgba(255, 124, 124, 0.35);
+}
+
+.ml-checkpoint--failed[data-state="active"] .ml-node {
+  border-color: #ff7c7c;
+  box-shadow:
+    0 0 0 6px rgba(255, 124, 124, 0.07),
+    0 0 0 3px rgba(255, 124, 124, 0.12),
+    0 0 18px rgba(255, 124, 124, 0.35);
+}
+
+.ml-checkpoint--failed[data-state="active"] .ml-node-num {
+  color: #ff7c7c;
+}
+
+.ml-checkpoint--failed[data-state="active"] .ml-cp-code {
+  color: #ff7c7c;
+}
+
+/* ── ONGOING: slightly brighter future treatment ── */
+.ml-checkpoint--ongoing[data-state="active"] .ml-node-num {
+  color: var(--color-phosphor);
+}
+
+/* ═══════════════════════════════════════════
+   RIGHT CARDS AREA
+═══════════════════════════════════════════ */
+.ml-cards-area {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 5vw;
+}
+
+/* ── Individual mission card ── */
+.ml-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 5vw 0 2vw;
+  opacity: 0;
+  will-change: opacity, transform;
+  pointer-events: none;
+  /* CSS transition smooths the JS-driven values */
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.ml-card-inner {
+  max-width: 700px;
+  background: rgba(14, 14, 14, 0.92);
+  border: 1px solid rgba(124, 255, 140, 0.09);
+  border-radius: 20px;
+  padding: 2.8rem 3.2rem;
+  position: relative;
+  overflow: hidden;
+  /* Subtle top glow edge */
+}
+
+/* Top glow edge on card */
+.ml-card-inner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(124, 255, 140, 0.35) 50%,
+    transparent 100%
+  );
+}
+
+/* Side accent bar */
+.ml-card-inner::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(124, 255, 140, 0.4) 50%,
+    transparent 100%
+  );
+  border-radius: 2px;
+}
+
+/* Failed card: warm border + top edge */
+.ml-card--failed .ml-card-inner {
+  border-color: rgba(255, 124, 124, 0.12);
+}
+
+.ml-card--failed .ml-card-inner::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 124, 124, 0.3) 50%,
+    transparent 100%
+  );
+}
+
+.ml-card--failed .ml-card-inner::after {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 124, 124, 0.35) 50%,
+    transparent 100%
+  );
+}
+
+/* Ongoing card: slightly stronger glow */
+.ml-card--ongoing .ml-card-inner {
+  border-color: rgba(124, 255, 140, 0.18);
+  box-shadow: 0 0 40px rgba(124, 255, 140, 0.04);
+}
+
+/* ── Card internals ── */
+.ml-card-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.4rem;
+}
+
+.ml-card-log-id {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--color-phosphor);
+  letter-spacing: 0.18em;
+  opacity: 0.65;
+}
+
+.ml-card-eyebrow-sep {
+  color: rgba(124, 255, 140, 0.25);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+}
+
+.ml-card-eyebrow-code {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--color-gray-400);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.ml-card--failed .ml-card-eyebrow-code {
+  color: rgba(255, 124, 124, 0.75);
+}
+
+.ml-card-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+  font-weight: 700;
+  color: var(--color-white);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.2rem;
+  text-transform: uppercase;
+}
+
+.ml-card--failed .ml-card-title {
+  color: rgba(240, 235, 235, 0.92);
+}
+
+.ml-card-body {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.35vw, 1.05rem);
+  color: var(--color-gray-300);
+  line-height: 1.72;
+  margin-bottom: 1.6rem;
+  max-width: 600px;
+}
+
+/* Tags */
+.ml-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1.4rem;
+}
+
+.ml-card-tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--color-phosphor);
+  background: rgba(124, 255, 140, 0.07);
+  border: 1px solid rgba(124, 255, 140, 0.18);
+  border-radius: 4px;
+  padding: 0.2rem 0.6rem;
+  letter-spacing: 0.1em;
+  transition: background 100ms linear;
+}
+
+.ml-card--failed .ml-card-tag {
+  color: #ff9898;
+  background: rgba(255, 124, 124, 0.06);
+  border-color: rgba(255, 124, 124, 0.18);
+}
+
+/* Status line */
+.ml-card-status {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(124, 255, 140, 0.07);
+}
+
+.ml-card-status--failed {
+  color: rgba(255, 124, 124, 0.6);
+  border-top-color: rgba(255, 124, 124, 0.08);
+}
+
+.ml-card-status--ongoing {
+  color: var(--color-phosphor);
+  opacity: 0.85;
+  border-top-color: rgba(124, 255, 140, 0.12);
+}
+
+.ml-status-pip {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.ml-card-status--ongoing .ml-status-pip {
+  animation: pip-blink 1.4s ease-in-out infinite;
+}
+
+@keyframes pip-blink {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1;   }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .ml-spine {
+    width: 220px;
+  }
+
+  .ml-card-title {
+    font-size: 1.7rem;
+  }
+
+  .ml-card-body {
+    font-size: 0.92rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .ml-columns {
+    flex-direction: column;
+  }
+
+  .ml-spine {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 1rem 4vw;
+    border-right: none;
+    border-bottom: 1px solid rgba(124, 255, 140, 0.06);
+    gap: 1rem;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .ml-rail { display: none; }
+
+  .ml-checkpoint {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 60px;
+  }
+
+  .ml-cp-info { text-align: center; }
+
+  .ml-card-inner {
+    padding: 1.8rem 1.6rem;
+  }
+
+  .ml-card-title {
+    font-size: 1.4rem;
+  }
+}
