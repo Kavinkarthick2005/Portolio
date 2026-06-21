@@ -9,7 +9,7 @@ const PROJECTS = [
     title: 'WhisperFlow CRM',
     description: 'An automated voice pipeline and workspace optimizing customer relationship flows with smart audio transcriber routing.',
     tags: ['Next.js', 'FastAPI', 'Groq Llama 3', 'Whisper API'],
-    screenshot: '/whisperflow.png',
+    screenshot: './whisperflow.png',
     url: 'https://crm-theta-ashen-29.vercel.app/login'
   },
   {
@@ -19,7 +19,7 @@ const PROJECTS = [
     title: 'CareerPro Guidance',
     description: 'A cloud-native career recommendations platform helping students outline career roadmaps utilizing PostgreSQL and predictive analytics.',
     tags: ['React', 'FastAPI', 'Azure Cloud', 'PostgreSQL'],
-    screenshot: '/careerpro.png',
+    screenshot: './careerpro.png',
     url: 'https://careerpro01.vercel.app/dashboard'
   },
   {
@@ -29,7 +29,7 @@ const PROJECTS = [
     title: 'Us Companion App',
     description: 'A shared mobile-first environment featuringsupa-coupled three-space sync databases and contextually customized Groq AI partners.',
     tags: ['Flutter', 'Supabase', 'Groq', 'Firebase'],
-    screenshot: '/us.png',
+    screenshot: './us.png',
     url: 'https://us-nu-three.vercel.app/'
   }
 ];

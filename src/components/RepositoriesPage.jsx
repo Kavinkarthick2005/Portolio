@@ -19,21 +19,21 @@ const REPO_METADATA = {
     categories: ['AI', 'MOBILE', 'SHIPPED'],
     impact: 'Play Store Launch Candidate',
     why: 'Built because most relationship apps feel transactional. I wanted to explore whether AI could preserve shared memories and conversations in a more human way.',
-    screenshot: '/us.png'
+    screenshot: './us.png'
   },
   'CRM': {
     description: 'Turn natural language into customer segments, campaigns, and AI-powered marketing workflows in seconds.',
     categories: ['AI', 'CRM', 'FULL STACK'],
     impact: 'AI CRM Prototype',
     why: 'Built to reduce the friction between marketing intent and campaign execution using natural language.',
-    screenshot: '/whisperflow.png'
+    screenshot: './whisperflow.png'
   },
   'CareerPro2': {
     description: 'Cloud-native career guidance platform built for Smart India Hackathon. Azure App Services, ML models, FastAPI backend supporting 1,000+ concurrent users.',
     categories: ['CLOUD', 'AI', 'BACKEND'],
     impact: 'Top 50 - Smart India Hackathon',
     why: 'Built to provide scalable career guidance to thousands of students simultaneously using cloud-native ML.',
-    screenshot: '/careerpro.png'
+    screenshot: './careerpro.png'
   },
   'Carbon-AQI': {
     description: 'Full-stack real-time air quality platform tracking 10 Indian cities. XGBoost prediction + PPO RL agent for mitigation recommendations.',

@@ -1,13 +1,22 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import TerminalBoot from './components/TerminalBoot';
 import IntroPage from './components/IntroPage';
 import RepositoriesPage from './components/RepositoriesPage';
+import SkillsPage from './components/SkillsPage';
 import './App.css';
 
 export default function App() {
   const [phase, setPhase] = useState('boot'); // 'boot' | 'intro'
   const [activeOverlay, setActiveOverlay] = useState(null); // null | 'repos'
   const [highlightedCard, setHighlightedCard] = useState(null);
+
+  useEffect(() => {
+    if (activeOverlay) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [activeOverlay]);
 
   const handleBootComplete = useCallback(() => {
     setPhase('intro');
@@ -36,6 +45,9 @@ export default function App() {
           <IntroPage onNavigate={handleNavigate} highlightedCard={highlightedCard} />
           {activeOverlay === 'repos' && (
             <RepositoriesPage onClose={() => handleReturnToHub('03')} />
+          )}
+          {activeOverlay === 'skills' && (
+            <SkillsPage onClose={() => handleReturnToHub('04')} />
           )}
         </>
       )}

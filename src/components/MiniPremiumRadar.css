@@ -1,0 +1,141 @@
+/* =====================================================
+   MINI PREMIUM RADAR (HUB CARD PREVIEW)
+   ===================================================== */
+
+.mini-radar-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(circle at center, rgba(10, 10, 10, 1) 0%, rgba(5, 5, 5, 1) 100%);
+  border-radius: inherit;
+}
+
+.mr-bloom {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(124, 255, 140, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Corner Brackets */
+.mr-corner {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border: 1px solid rgba(124, 255, 140, 0.4);
+  z-index: 2;
+  margin: 10px;
+}
+
+.mr-corner.top-left { top: 0; left: 0; border-right: none; border-bottom: none; }
+.mr-corner.top-right { top: 0; right: 0; border-left: none; border-bottom: none; }
+.mr-corner.bottom-left { bottom: 0; left: 0; border-right: none; border-top: none; }
+.mr-corner.bottom-right { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+.mr-core {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  z-index: 5;
+}
+
+.mr-grid {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(124, 255, 140, 0.2);
+  background: radial-gradient(circle at center, rgba(124, 255, 140, 0.05) 0%, transparent 70%);
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(124, 255, 140, 0.1) inset;
+}
+
+.mr-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(124, 255, 140, 0.15);
+  border-radius: 50%;
+}
+.mr-ring-1 { width: 33%; height: 33%; border-style: dashed; opacity: 0.5; }
+.mr-ring-2 { width: 66%; height: 66%; }
+.mr-ring-3 { width: 100%; height: 100%; }
+
+.mr-crosshair {
+  position: absolute;
+  background: rgba(124, 255, 140, 0.15);
+}
+.mr-cross-x { top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%); }
+.mr-cross-y { left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%); }
+
+/* Volumetric Sweep Arm */
+.mr-sweep {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 50%; height: 50%;
+  background: conic-gradient(from 180deg at 0 0, rgba(124, 255, 140, 0.5) 0deg, rgba(124, 255, 140, 0.05) 45deg, transparent 90deg);
+  transform-origin: 0% 0%;
+  animation: mr-scan 3s linear infinite;
+  border-radius: 0 100% 0 0;
+  pointer-events: none;
+  z-index: 6;
+}
+
+@keyframes mr-scan {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.mr-nodes {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+}
+
+.mr-node {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--color-phosphor);
+  border-radius: 50%;
+  box-shadow: 0 0 5px var(--color-phosphor);
+  transform: translate(-50%, -50%);
+  animation: mr-blink 2s infinite alternate;
+}
+
+.mr-node.active {
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  box-shadow: 0 0 10px 2px var(--color-phosphor);
+}
+
+@keyframes mr-blink {
+  0% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.mr-center-pulse {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 4px; height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px 4px rgba(124, 255, 140, 0.4);
+  animation: mr-core-pulse 1.5s infinite;
+}
+
+@keyframes mr-core-pulse {
+  0%, 100% { box-shadow: 0 0 5px 2px rgba(124, 255, 140, 0.3); }
+  50% { box-shadow: 0 0 15px 5px rgba(124, 255, 140, 0.6); }
+}

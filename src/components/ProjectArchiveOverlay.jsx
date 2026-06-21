@@ -10,7 +10,7 @@ const ARCHIVE_PROJECTS = [
       'customer interaction.',
       'Turns natural language into execution.'
     ],
-    screenshot: '/crm-project-ss.png',
+    screenshot: './crm-project-ss.png',
     link: 'https://crm-theta-ashen-29.vercel.app/login',
     bgGradient: 'radial-gradient(circle at center, rgba(10, 50, 100, 0.4), #0a0a0a 70%)',
     hotspots: [
@@ -26,7 +26,7 @@ const ARCHIVE_PROJECTS = [
       'designed for couples.',
       'Preserves shared memories and context.'
     ],
-    screenshot: '/us-project-ss.png',
+    screenshot: './us-project-ss.png',
     link: 'https://us-nu-three.vercel.app/',
     bgGradient: 'radial-gradient(circle at center, rgba(150, 20, 100, 0.3), #0a0a0a 70%)',
     hotspots: [
@@ -42,7 +42,7 @@ const ARCHIVE_PROJECTS = [
       'at a national scale.',
       'Built for extreme traffic conditions.'
     ],
-    screenshot: '/careerpro-project-ss.png',
+    screenshot: './careerpro-project-ss.png',
     link: 'https://careerpro01.vercel.app/dashboard',
     bgGradient: 'radial-gradient(circle at center, rgba(20, 100, 150, 0.3), #0a0a0a 70%)',
     hotspots: [
@@ -58,7 +58,7 @@ const ARCHIVE_PROJECTS = [
       'Predicts PM2.5 with XGBoost.',
       'Mitigates with RL Agents.'
     ],
-    screenshot: '/carbon_aqi.png', // User must copy generated image here
+    screenshot: './carbon_aqi.png', // User must copy generated image here
     link: null,
     bgGradient: 'radial-gradient(circle at center, rgba(20, 150, 80, 0.3), #0a0a0a 70%)',
     hotspots: [
@@ -74,7 +74,7 @@ const ARCHIVE_PROJECTS = [
       'Precision kinematic hand tracking.',
       'Dynamic difficulty adjustment.'
     ],
-    screenshot: '/rehab_vr.png', // User must copy generated image here
+    screenshot: './rehab_vr.png', // User must copy generated image here
     link: null,
     bgGradient: 'radial-gradient(circle at center, rgba(100, 20, 150, 0.3), #0a0a0a 70%)',
     hotspots: [

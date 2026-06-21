@@ -12,7 +12,7 @@ const PROJECTS = [
       'An AI-powered mini CRM — intelligent contact management, conversation memory, and deal tracking.',
     stack: ['FastAPI', 'PostgreSQL', 'Groq API', 'React'],
     link: 'https://crm-theta-ashen-29.vercel.app/login',
-    image: '/whisperflow.png',
+    image: './whisperflow.png',
     frame: 'browser',
   },
   {
@@ -24,7 +24,7 @@ const PROJECTS = [
       'A cloud-native career guidance platform serving 1,000+ concurrent users — built under national competition pressure.',
     stack: ['Azure', 'FastAPI', 'ML Models', 'PostgreSQL'],
     link: 'https://careerpro01.vercel.app/dashboard',
-    image: '/careerpro.png',
+    image: './careerpro.png',
     frame: 'browser',
   },
   {
@@ -36,7 +36,7 @@ const PROJECTS = [
       'A production-grade couple companion app — He/She/Us architecture, AI chat, shared memory, and a full custom design system built for Play Store launch.',
     stack: ['Flutter', 'Supabase', 'Groq/Llama 3', 'Firebase'],
     link: 'https://us-nu-three.vercel.app/',
-    image: '/us-mobile.jpeg',
+    image: './us-mobile.jpeg',
     frame: 'phone',
   },
 ];

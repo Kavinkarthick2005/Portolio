@@ -1,0 +1,336 @@
+/* =====================================================
+   SKILLS PAGE OVERLAY
+   ===================================================== */
+
+.skills-page {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #0a0a0a;
+  color: var(--color-gray-100);
+  animation: skillsFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes skillsFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sp-atmospheric-glow {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150vw;
+  height: 150vw;
+  background: radial-gradient(circle, rgba(124, 255, 140, 0.03) 0%, transparent 60%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Custom Scrollbar */
+.skills-page::-webkit-scrollbar {
+  width: 6px;
+}
+.skills-page::-webkit-scrollbar-track {
+  background: transparent;
+}
+.skills-page::-webkit-scrollbar-thumb {
+  background: rgba(124, 255, 140, 0.2);
+  border-radius: 4px;
+}
+.skills-page::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 255, 140, 0.4);
+}
+
+.skills-page-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 5vw;
+}
+
+.sp-section {
+  margin-bottom: 25vh;
+  position: relative;
+}
+
+.sp-radar-hero {
+  margin-bottom: 30vh;
+}
+
+/* ── CINEMATIC SCROLL TRANSITIONS ── */
+.sp-cinematic-fade {
+  opacity: 0;
+  transform: translateY(40px) scale(0.98);
+  filter: blur(8px);
+  will-change: opacity, transform, filter;
+  transition: 
+    opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
+    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sp-cinematic-fade.sp-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0px);
+}
+
+/* ── SECTION HEADING ── */
+.sp-section-heading {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--color-phosphor);
+  letter-spacing: 0.2em;
+  margin-bottom: 4rem;
+  text-align: center;
+  opacity: 0.5;
+}
+
+/* ── TECH ECOSYSTEM FLOWS ── */
+.ecosystem-flows {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  align-items: center;
+}
+
+.eco-flow-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: var(--color-gray-100);
+}
+
+.eco-flow-node {
+  padding: 0.8rem 1.5rem;
+  border: 1px solid rgba(124, 255, 140, 0.15);
+  border-radius: 8px;
+  background: rgba(124, 255, 140, 0.03);
+  transition: all 0.3s ease;
+}
+
+.eco-flow-node:hover {
+  background: rgba(124, 255, 140, 0.08);
+  border-color: rgba(124, 255, 140, 0.4);
+  box-shadow: 0 0 20px rgba(124, 255, 140, 0.1);
+  transform: translateY(-2px);
+}
+
+.eco-flow-arrow {
+  color: var(--color-phosphor);
+  opacity: 0.6;
+  font-size: 1.2rem;
+}
+
+.eco-flow-desc {
+  color: var(--color-gray-500);
+  font-size: 0.9rem;
+  margin-left: 2rem;
+  font-style: italic;
+  font-family: var(--font-body);
+}
+
+/* ── REAL WORLD IMPACT ── */
+.impact-story-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5rem;
+  text-align: center;
+}
+
+.impact-story-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.impact-story-num {
+  font-family: var(--font-display);
+  font-size: 5rem;
+  font-weight: 800;
+  color: var(--color-white);
+  line-height: 1;
+  text-shadow: 0 0 30px rgba(124, 255, 140, 0.1);
+}
+
+.impact-story-label {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-gray-500);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+
+/* ── EVOLUTION FLOW ── */
+.evolution-flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.evo-step {
+  text-align: center;
+  padding: 2.5rem;
+  background: rgba(10, 10, 10, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 450px;
+  transition: border-color 0.4s ease;
+}
+
+.evo-step:hover {
+  border-color: rgba(124, 255, 140, 0.2);
+}
+
+.evo-year {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-phosphor);
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.1em;
+}
+
+.evo-phase {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-white);
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.evo-techs {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-gray-400);
+}
+
+.evo-arrow {
+  color: var(--color-gray-500);
+  font-size: 1.8rem;
+  opacity: 0.5;
+}
+
+/* ── CURRENTLY EXPLORING ── */
+.exploring-flows {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  align-items: center;
+}
+
+.explore-line {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 550px;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.explore-line:last-child {
+  border-bottom: none;
+}
+
+.explore-tag {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  width: 160px;
+  text-align: right;
+}
+
+.explore-tag.active { color: var(--color-phosphor); }
+.explore-tag.building { color: #a18ce5; }
+.explore-tag.experimenting { color: #ffb86c; }
+.explore-tag.research { color: var(--color-gray-500); }
+
+.explore-text {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  color: var(--color-white);
+}
+
+/* ── FINAL SIGNATURE ── */
+.signature-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 5rem;
+  padding-bottom: 15vh;
+}
+
+.signature-emotional {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.6;
+  color: var(--color-gray-300);
+}
+
+.skills-return-btn {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-gray-500);
+  background: transparent;
+  border: 1px solid var(--color-gray-700);
+  padding: 1.2rem 2.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  letter-spacing: 0.15em;
+  transition: all 0.3s ease;
+}
+
+.skills-return-btn:hover {
+  color: var(--color-white);
+  border-color: var(--color-phosphor);
+  background: rgba(124, 255, 140, 0.05);
+}
+
+/* Skills Exit Animation */
+.skills-page.is-exiting.skills-page--converge .sp-cinematic-fade,
+.skills-page.is-exiting.skills-page--converge .skills-radar-composition {
+  transform: scale(0.95);
+  filter: blur(10px);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.skills-page.is-exiting.skills-page--crt-collapse {
+  animation: crtCollapse 0.3s cubic-bezier(0.8, 0, 0.2, 1) forwards;
+}
+
+@keyframes crtCollapse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scaleY(0.005) scaleX(1); opacity: 1; }
+  100% { transform: scaleY(0.005) scaleX(0); opacity: 0; }
+}
+
+.skills-black-overlay {
+  position: fixed;
+  inset: 0;
+  background: black;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.skills-page.is-exiting.skills-page--black .skills-black-overlay {
+  opacity: 1;
+}

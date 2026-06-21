@@ -6,7 +6,7 @@ export const PROJECT_DATA = {
   'whisperflow': {
     title: 'WHISPERFLOW CRM',
     subtitle: 'Turn natural language into customer segments,\ncampaigns and AI-powered workflows.',
-    screenshot: '/whisperflow.png',
+    screenshot: './whisperflow.png',
     intelligence: { status: 'ACTIVE', role: 'SOLO DEVELOPER', domain: 'AI CRM', timeline: '2025', stack: 'FASTAPI · REACT · GROQ' },
     hotspots: [
       { top: '35%', left: '20%', title: 'CAMPAIGN BUILDER', desc: 'Turns natural language into executable campaigns.\nSupports segmentation, automation and workflow generation.' },
@@ -43,7 +43,7 @@ export const PROJECT_DATA = {
   'careerpro': {
     title: 'CAREERPRO',
     subtitle: 'Cloud-native career guidance platform serving\n1,000+ concurrent users under pressure.',
-    screenshot: '/careerpro.png',
+    screenshot: './careerpro.png',
     intelligence: { status: 'COMPLETED', role: 'BACKEND LEAD', domain: 'ED-TECH', timeline: '2023', stack: 'AZURE · FASTAPI · ML' },
     hotspots: [
       { top: '40%', left: '30%', title: 'PREDICTION ENGINE', desc: 'Machine learning pipeline processing student metrics to generate personalized roadmaps.' },
@@ -80,7 +80,7 @@ export const PROJECT_DATA = {
   'us': {
     title: 'US: COMPANION',
     subtitle: 'He/She/Us architecture. Shared memory systems\nand deep emotional context preservation.',
-    screenshot: '/us.png',
+    screenshot: './us.png',
     intelligence: { status: 'LAUNCH CANDIDATE', role: 'FULL STACK', domain: 'LIFESTYLE', timeline: '2024', stack: 'FLUTTER · SUPABASE · LLAMA 3' },
     hotspots: [
       { top: '25%', left: '30%', title: 'THE "US" SPACE', desc: 'A shared neutral ground where AI mediates and preserves joint memories.' },
@@ -117,7 +117,7 @@ export const PROJECT_DATA = {
   'carbon_aqi': {
     title: 'LIVE AIR QUALITY COMMAND CENTER',
     subtitle: 'Full-stack real-time platform tracking 10 Indian cities\nwith XGBoost prediction and RL mitigation.',
-    screenshot: '/carbon_aqi.png',
+    screenshot: './carbon_aqi.png',
     intelligence: { status: 'SHIPPED', role: 'AI RESEARCH', domain: 'ENVIRONMENT', timeline: '2024', stack: 'PYTHON · RL · XGBOOST' },
     hotspots: [
       { top: '30%', left: '20%', title: 'XGBOOST PREDICTOR', desc: 'Real-time forecasting of PM2.5 and AQI levels across urban grids.' },
@@ -155,7 +155,7 @@ export const PROJECT_DATA = {
   'rehab_vr': {
     title: 'VR REHABILITATION SYSTEM',
     subtitle: 'Therapeutic VR mini-game transforming stroke assessment\ninto an immersive fish-feeding experience.',
-    screenshot: '/rehab_vr.png',
+    screenshot: './rehab_vr.png',
     intelligence: { status: 'CLINICAL CONCEPT', role: 'VR DEV', domain: 'HEALTHCARE', timeline: '2023', stack: 'UNITY · C# · VR' },
     hotspots: [
       { top: '40%', left: '25%', title: 'HAND TRACKING', desc: 'Precision kinematic tracking to measure patient motor control recovery.' },

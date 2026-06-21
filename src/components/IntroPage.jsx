@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import './IntroPage.css';
 import MissionLog from './MissionLog';
 import SelectedWork from './SelectedWork';
+import TacticalRadar from './TacticalRadar';
+import MiniPremiumRadar from './MiniPremiumRadar';
 
 /* ─── Cycling Word Pairs ─── */
 const WORD_PAIRS = [
@@ -383,6 +385,23 @@ export default function IntroPage({ onNavigate, highlightedCard }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Intersection Observer for popping animations
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('.pop-text').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="custom-cursor-root intro-page" id="intro-page">
       <CustomCursor />
@@ -491,12 +510,40 @@ export default function IntroPage({ onNavigate, highlightedCard }) {
                         e.preventDefault();
                         window.dispatchEvent(new Event('open-project-archive'));
                       }
+                      if (card.index === '04') {
+                        e.preventDefault();
+                        if (onNavigate) onNavigate('skills');
+                      }
                     }}
                   >
-                    {/* Preview overlay on hover */}
-                    <div className="hub-card-preview">
-                      <span className="hub-preview-tag">{card.tag}</span>
-                      <p className="hub-preview-text">{card.preview}</p>
+                    {/* Visual Previews at rest */}
+                    <div className="hub-card-visual" aria-hidden="true">
+                      {card.index === '01' && (
+                        <div className="preview-experience">
+                          <span>Tube Investments of India</span>
+                          <span>Brainwaves Neuro Rehab</span>
+                          <span>Marlion Games</span>
+                        </div>
+                      )}
+                      {card.index === '02' && (
+                        <div className="preview-projects">
+                          <span className="proj-chip">Us</span>
+                          <span className="proj-chip">Carbon AQI</span>
+                          <span className="proj-chip">RiskLoom</span>
+                        </div>
+                      )}
+                      {card.index === '03' && (
+                        <div className="preview-repos">
+                          {Array.from({ length: 35 }).map((_, i) => (
+                            <div key={i} className={`mini-heat-cell heat-${Math.floor(Math.random() * 4)}`} />
+                          ))}
+                        </div>
+                      )}
+                      {card.index === '04' && (
+                        <div className="preview-skills">
+                          <MiniPremiumRadar />
+                        </div>
+                      )}
                     </div>
                     {/* Default card content */}
                     <div className="hub-card-default">
@@ -539,6 +586,26 @@ export default function IntroPage({ onNavigate, highlightedCard }) {
 
       {/* 5. Selected Work — Curated Projects */}
       <SelectedWork />
+
+      {/* Cool Transition Divider */}
+      <div className="radar-transition">
+        <div className="rt-line"></div>
+        <div className="rt-text">SYSTEM.HUD.INITIALIZE()</div>
+        <div className="rt-line"></div>
+      </div>
+
+      {/* 6. Tactical Skills Radar */}
+      <section className="intro-radar-section">
+        <div className="radar-header">
+          <h2 className="pop-text" style={{ transitionDelay: '0ms' }}>TACTICAL OVERVIEW</h2>
+          <p className="pop-text" style={{ transitionDelay: '150ms' }}>
+            Technologies behind the builds
+          </p>
+        </div>
+        <div className="pop-text" style={{ transitionDelay: '300ms' }}>
+          <TacticalRadar />
+        </div>
+      </section>
 
       {/* Socials */}
       <div className="intro-socials" id="intro-socials">
