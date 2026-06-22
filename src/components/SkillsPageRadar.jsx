@@ -38,12 +38,33 @@ const renderConfidenceBar = (pct) => {
   );
 };
 
-export default function SkillsPageRadar({ isPaused = false }) {
+export default function SkillsPageRadar({ isPaused = false, isMiniature = false, isPreview = false }) {
   const [targetLock, setTargetLock] = useState(null);
   const [bootPhase, setBootPhase] = useState(0);
   
   const radarContainerRef = useRef(null);
   const blipsRef = useRef([]);
+
+  // Bind hover to parent card if miniature or preview
+  useEffect(() => {
+    if (!isMiniature && !isPreview) return;
+    const triggerArea = isMiniature 
+      ? radarContainerRef.current?.closest('.hub-card-inner') 
+      : radarContainerRef.current?.closest('.intro-radar-section');
+      
+    if (!triggerArea) return;
+    
+    const handleEnter = () => setTargetLock('Python');
+    const handleLeave = () => setTargetLock(null);
+    
+    triggerArea.addEventListener('mouseenter', handleEnter);
+    triggerArea.addEventListener('mouseleave', handleLeave);
+    
+    return () => {
+      triggerArea.removeEventListener('mouseenter', handleEnter);
+      triggerArea.removeEventListener('mouseleave', handleLeave);
+    };
+  }, [isMiniature, isPreview]);
 
   // Boot Sequence
   useEffect(() => {
@@ -99,13 +120,51 @@ export default function SkillsPageRadar({ isPaused = false }) {
         const scale = (finalZ + 2) / 3; 
         const opacity = Math.max(0.1, (finalZ + 1) / 2);
         
-        const radius = 200; 
+        // Use 12.5 multiplier so when multiplied by var(--r, 16px) it yields ~200px equivalent
+        const radius = 12.5; 
         const posX = xRot * radius;
         const posY = finalY * radius;
 
-        blip.style.transform = `translate(-50%, -50%) translate(${posX}px, ${posY}px) scale(${scale})`;
+        blip.style.transform = `translate(-50%, -50%) translate(calc(${posX} * var(--r)), calc(${posY} * var(--r))) scale(${scale})`;
         blip.style.opacity = opacity;
         blip.style.zIndex = Math.floor(finalZ * 100);
+
+        // Dynamic node illumination based on sweep angle
+        const nodeAngle = Math.atan2(posY, posX); // -PI to PI
+        
+        // Compute sweep angle
+        const now = performance.now();
+        const cycle = (now % 4000) / 4000;
+        const sweepDeg = cycle * 360;
+        
+        // Sync CSS transform for sweep
+        if (i === 0 && radarContainerRef.current) {
+          const sweepEl = radarContainerRef.current.querySelector('.sr-radar-sweep');
+          if (sweepEl) {
+            sweepEl.style.transform = `rotate(${sweepDeg}deg)`;
+          }
+        }
+
+        // Calculate leading edge angle
+        // With full circle sweep, rotate(0deg) points straight UP (-PI/2 radians).
+        let sweepAngle = (-Math.PI / 2) + (sweepDeg * Math.PI / 180);
+        let normSweep = sweepAngle % (Math.PI * 2);
+        if (normSweep > Math.PI) normSweep -= Math.PI * 2;
+
+        let diff = normSweep - nodeAngle;
+        if (diff > Math.PI) diff -= Math.PI * 2;
+        if (diff < -Math.PI) diff += Math.PI * 2;
+
+        // Sweep has a tail that trails behind it. 
+        // Clockwise rotation means trailing tail is when diff is positive (sweep passed the node)
+        // distance represents how far behind the leading edge the node is.
+        const distance = diff; 
+        if (distance > 0 && distance < 0.8) {
+           const intensity = 1 - (distance / 0.8);
+           blip.style.setProperty('--illum', intensity.toFixed(2));
+        } else {
+           blip.style.setProperty('--illum', '0');
+        }
       });
 
       animationFrameId = requestAnimationFrame(updateBlips);
@@ -125,8 +184,12 @@ export default function SkillsPageRadar({ isPaused = false }) {
     bootPhase >= 5 ? 'boot-5-up' : ''
   ].join(' ').trim();
 
+  let modeClass = '';
+  if (isMiniature) modeClass = 'is-miniature';
+  if (isPreview) modeClass = 'is-preview';
+
   return (
-    <div className={`skills-radar-composition ${bootClasses}`}>
+    <div className={`skills-radar-composition ${bootClasses} ${modeClass} ${targetLock ? 'target-acquired' : ''}`}>
       
       {/* LEFT HUD: Header & Status */}
       <div className="sr-left-hud">

@@ -1,0 +1,336 @@
+/* =====================================================
+   MISSION COMPLETE SECTION
+   ===================================================== */
+
+.mission-complete-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  padding: 8rem 2rem 10rem;
+  background-color: var(--color-bg-dark);
+  border-top: 1px solid rgba(124, 255, 140, 0.1);
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+/* ─── ZONE 1: THE DEBRIEF ─── */
+.mc-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 700;
+  color: var(--color-white);
+  letter-spacing: 0.05em;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 20px rgba(124, 255, 140, 0.15);
+}
+
+.mc-copy {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-gray-400);
+  line-height: 1.8;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 10rem; /* Generous space below Zone 1 */
+}
+
+.mc-copy p {
+  margin-bottom: 1.5rem;
+}
+
+
+/* ─── ZONE 2: THE SIGNATURE FOCAL POINT ─── */
+.interactive-signature-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin-bottom: 10rem; /* Generous space below Zone 2 */
+}
+
+.is-image-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px; /* Large centerpiece */
+  min-width: 320px;
+  height: auto;
+  min-height: 150px;
+  margin-bottom: 2rem;
+  cursor: crosshair;
+}
+
+/* Default state: white pencil appearance */
+.is-base {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* Converts black ink on white bg to white ink on transparent bg */
+  filter: invert(1) opacity(0.8);
+  mix-blend-mode: screen;
+  transition: opacity 1s ease, filter 1s ease;
+}
+
+/* Authenticated Phosphor version */
+.is-scanned {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  /* Convert to phosphor green */
+  filter: invert(1) sepia(1) hue-rotate(80deg) saturate(10) brightness(1.2);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 1s ease, filter 1s ease;
+}
+
+/* State changes driven by React classes */
+.is-image-container.show-digital .is-base {
+  opacity: 0.1;
+  filter: invert(1) blur(2px);
+}
+
+.is-image-container.show-digital .is-scanned {
+  opacity: 0.7;
+}
+
+/* The vertical scan line wipe effect on state toggle */
+.is-scan-line {
+  position: absolute;
+  top: -5%; bottom: -5%;
+  width: 2px;
+  background: var(--color-phosphor);
+  box-shadow: 0 0 8px var(--color-phosphor), 0 0 15px var(--color-phosphor);
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.is-image-container.show-digital .is-scan-line {
+  animation: scan-line-travel 1.5s ease-in-out forwards;
+}
+
+@keyframes scan-line-travel {
+  0% { left: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { left: 100%; opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+
+/* Captions beneath the artwork */
+.is-caption-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.is-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--color-white);
+  margin-bottom: 0.5rem;
+}
+
+.is-status {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-gray-500);
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.is-status-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--color-phosphor);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--color-phosphor);
+  animation: pulse-dot 2s infinite;
+}
+
+/* The Memory Fragment line acting as a quiet coda */
+.is-memory-fragment {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-gray-500);
+  letter-spacing: 0.1em;
+  max-width: 400px;
+  line-height: 1.6;
+  opacity: 0.7;
+}
+
+.mf-tag {
+  display: block;
+  color: var(--color-phosphor);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.2em;
+  font-size: 0.65rem;
+}
+
+
+/* ─── ZONE 3: MISSION FILES NAV ROW ─── */
+.mission-files-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.mf-title {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-gray-500);
+  margin-bottom: 2rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.mc-bottom-grid {
+  display: flex;
+  gap: 6rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: 6rem;
+}
+
+.mc-left-col, .mc-right-col {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mf-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 3rem;
+}
+
+.mf-link {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-gray-400);
+  text-decoration: none;
+  letter-spacing: 0.15em;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mf-link::before {
+  content: '→';
+  color: var(--color-phosphor);
+  opacity: 0.5;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mf-link:hover {
+  color: var(--color-phosphor);
+  text-shadow: 0 0 10px rgba(124, 255, 140, 0.5);
+}
+
+.mf-link:hover::before {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+  .mc-copy { margin-bottom: 6rem; }
+  .interactive-signature-wrapper { margin-bottom: 6rem; }
+  .mf-list {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+}
+
+/* ─── MEMORY FRAGMENT DIAGRAM EFFECTS ─── */
+
+.mf-sketch-container {
+  position: relative;
+  width: 250px;
+  height: auto;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 1.5rem auto 0;
+  cursor: crosshair;
+}
+
+/* Base state: Original notebook sketch */
+.mf-sketch-base {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 1;
+  filter: contrast(0.9) brightness(0.9);
+  transition: opacity 1s ease, filter 1s ease;
+}
+
+/* Scanned state: Digital phosphor */
+.mf-sketch-scanned {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  /* Force paper to black and ink to white, then colorize */
+  filter: grayscale(1) contrast(4) invert(1) sepia(1) hue-rotate(80deg) saturate(10) brightness(1.2);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 1s ease, filter 1s ease;
+}
+
+/* The vertical scan line */
+.mf-scan-line {
+  position: absolute;
+  top: -5%; bottom: -5%;
+  width: 2px;
+  background: var(--color-phosphor);
+  box-shadow: 0 0 8px var(--color-phosphor), 0 0 15px var(--color-phosphor);
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Transition states */
+.mf-sketch-container.show-digital .mf-sketch-base {
+  opacity: 0.1;
+  filter: invert(1) blur(2px);
+}
+
+.mf-sketch-container.show-digital .mf-sketch-scanned {
+  opacity: 1;
+}
+
+.mf-sketch-container.show-digital .mf-scan-line {
+  animation: scan-line-travel 1.5s ease-in-out forwards;
+}
+
+.mf-heartbeat {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 8px; height: 8px;
+  background: var(--color-phosphor);
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 10px var(--color-phosphor), 0 0 20px var(--color-phosphor);
+  pointer-events: none;
+}
+
+.mf-sketch-container.show-digital .mf-heartbeat {
+  animation: heartbeat-pulse 1.2s infinite ease-in-out;
+  animation-delay: 1.5s;
+}
