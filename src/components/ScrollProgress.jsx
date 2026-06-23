@@ -8,22 +8,23 @@ export default function ScrollProgress() {
   const barRef = useRef(null);
 
   useEffect(() => {
-    const animation = gsap.to(barRef.current, {
-      scaleY: 1,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: document.documentElement,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.3,
-      }
-    });
+    const updateProgress = () => {
+      const scrollPx = document.documentElement.scrollTop || document.body.scrollTop;
+      const winHeightPx = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = winHeightPx > 0 ? scrollPx / winHeightPx : 0;
+      
+      gsap.to(barRef.current, { 
+        scaleY: scrolled, 
+        duration: 0.3, 
+        ease: 'power1.out' 
+      });
+    };
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress(); // Initial check
 
     return () => {
-      if (animation.scrollTrigger) {
-        animation.scrollTrigger.kill();
-      }
-      animation.kill();
+      window.removeEventListener('scroll', updateProgress);
     };
   }, []);
 
