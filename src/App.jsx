@@ -3,6 +3,7 @@ import TerminalBoot from './components/TerminalBoot';
 import IntroPage from './components/IntroPage';
 import RepositoriesPage from './components/RepositoriesPage';
 import SkillsPage from './components/SkillsPage';
+import ScrollProgress from './components/ScrollProgress';
 import './App.css';
 
 export default function App() {
@@ -39,6 +40,7 @@ export default function App() {
 
   return (
     <div className="app">
+      <ScrollProgress />
       {phase === 'boot' && <TerminalBoot onComplete={handleBootComplete} />}
       {phase === 'intro' && (
         <>
