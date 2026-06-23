@@ -56,24 +56,11 @@ body {
   color: var(--color-white);
   overflow-x: hidden;
   min-height: 100vh;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
 }
 
-/* Global Custom Scrollbar */
+/* Hide global scrollbar (Chrome, Safari, Opera) */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(124, 255, 140, 0.4);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(124, 255, 140, 0.8);
-}
-::-webkit-scrollbar-button {
   display: none;
 }
 
