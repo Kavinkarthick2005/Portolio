@@ -63,7 +63,7 @@
 }
 
 /* Responsive collapse to prevent text clipping */
-@media (max-width: calc(75 * var(--r))) {
+@media (max-width: 1200px) {
   .skills-radar-composition:not(.is-miniature) {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
@@ -115,7 +115,7 @@
   line-height: 1.5;
 }
 
-@media (max-width: calc(75 * var(--r))) {
+@media (max-width: 1200px) {
   .sr-subtitle { margin: 0 auto; }
 }
 
@@ -127,7 +127,7 @@
   border-top: 1px solid rgba(124, 255, 140, 0.1);
 }
 
-@media (max-width: calc(75 * var(--r))) {
+@media (max-width: 1200px) {
   .sr-status-grid { justify-content: center; }
 }
 
@@ -431,7 +431,7 @@
   justify-content: flex-end;
 }
 
-@media (max-width: calc(75 * var(--r))) {
+@media (max-width: 1200px) {
   .sr-right-hud { justify-content: center; }
 }
 
