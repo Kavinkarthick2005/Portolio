@@ -8,6 +8,7 @@ import SkillsPageRadar from './SkillsPageRadar';
 import InteractiveSignature from './InteractiveSignature';
 import MissionFiles from './MissionFiles';
 import MemoryFragmentEasterEgg from './MemoryFragmentEasterEgg';
+import MissionComplete from './MissionComplete';
 
 /* ─── Cycling Word Pairs ─── */
 const WORD_PAIRS = [
@@ -582,32 +583,8 @@ export default function IntroPage({ onNavigate, highlightedCard }) {
         </div>
       </section>
 
-      {/* 7. Mission Complete Rework */}
-      <section className="mission-complete-section" id="contact">
-        <h1 className="mc-title">MISSION COMPLETE</h1>
-        <div className="mc-copy">
-          <p>
-            Systems deployed.<br/>
-            Experiments conducted.<br/>
-            Lessons collected.
-          </p>
-          <p>
-            Still exploring.<br/>
-            Still building.
-          </p>
-        </div>
-
-        <div className="mc-bottom-grid">
-          <div className="mc-left-col">
-            <InteractiveSignature />
-          </div>
-          <div className="mc-right-col">
-            <MemoryFragmentEasterEgg />
-          </div>
-        </div>
-
-        <MissionFiles />
-      </section>
+      {/* 7. Final Mission Complete Section */}
+      <MissionComplete />
     </div>
   );
 }
