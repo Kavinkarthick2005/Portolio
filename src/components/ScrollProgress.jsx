@@ -9,7 +9,7 @@ export default function ScrollProgress() {
 
   useEffect(() => {
     const animation = gsap.to(barRef.current, {
-      scaleX: 1,
+      scaleY: 1,
       ease: 'none',
       scrollTrigger: {
         trigger: document.documentElement,
@@ -33,9 +33,9 @@ export default function ScrollProgress() {
       style={{
         position: 'fixed',
         top: 0,
-        left: 0,
-        width: '100%',
-        height: '4px',
+        right: 0,
+        width: '4px',
+        height: '100%',
         backgroundColor: 'transparent',
         zIndex: 9999,
         pointerEvents: 'none',
@@ -48,8 +48,8 @@ export default function ScrollProgress() {
           width: '100%',
           height: '100%',
           backgroundColor: 'var(--color-phosphor, #7CFF8C)',
-          transformOrigin: 'left center',
-          transform: 'scaleX(0)',
+          transformOrigin: 'top center',
+          transform: 'scaleY(0)',
           boxShadow: '0 0 8px rgba(124, 255, 140, 0.6)'
         }}
       />
